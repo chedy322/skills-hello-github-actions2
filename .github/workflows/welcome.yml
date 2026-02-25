@@ -1,13 +1,6 @@
 name: Post welcome comment
-on: 
-    pull-request: 
-        types: opened
+on:
+    pull_request:
+        types: [opened]
 permissions:
     pull-requests: write
-jobs:
-    welcome:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - name: Post welcome comment
-              run: echo "Welcome!"
