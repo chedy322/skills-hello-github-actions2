@@ -1,16 +1,54 @@
-name: Post welcome comment
+name: CI Pipeline
+
 on:
-    pull_request:
-        types: [opened]
-permissions:
-    pull-requests: write
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
-    welcome:
-        name: Post welcome comment
-        runs-on: ubuntu-latest
-        steps:
-            - run: gh pr comment "$PR_URL" --body "Welcome to the repository!" 
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                PR_URL: ${{ github.event.pull_request.html_url }}
+  test:
+    name: Run tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [20.x, 22.x] 
+
+    steps:
+      - name: Checkout code repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies and run tests
+        run: |
+          npm ci
+          npm test
+        env: 
+          CI: true
+      
+      - name: Create artifact log 
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.os }}-${{ matrix.node-version }}
+          path: coverage/
+
+  build:
+    # This only runs if 'test' passes successfully
+    needs: test 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build --if-present
