@@ -2,10 +2,10 @@ name: CI Pipeline
 
 on:
   push:
-    branches: ["new-branch"]
+    branches: ["main","new-branch"]
     paths-ignore: ["*.md"]  
   pull_request:
-    branches: ["new-branch"]
+    branches: ["main","new-branch"]
 
 env: 
   Name: first workflow
