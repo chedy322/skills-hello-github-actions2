@@ -4,7 +4,7 @@
 
 Hey chedy322!
 
-
+[![CI Pipeline](https://github.com/chedy322/skills-hello-github-actions2/actions/workflows/welcome.yml/badge.svg?branch=main)](https://github.com/chedy322/skills-hello-github-actions2/actions/workflows/welcome.yml)
 Markdown
 # 🚀 My Enterprise App
 
