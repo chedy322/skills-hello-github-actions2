@@ -3,45 +3,30 @@ name: CI Pipeline
 on:
   push:
     branches: ["new-branch"]
+    paths-ignore: ["*.md"]  
   pull_request:
     branches: ["new-branch"]
 
 env: 
   Name: first workflow
+
 jobs:
   test:
     name: Run tests
-    runs-on: ${{ matrix.os }}
+    uses: ./.github/workflows/reuseableTestWorkflow.yml
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
         node-version: [20.x, 22.x] 
       fail-fast: false
+    runs-on: ${{ matrix.os }}
+    with:
+      node-version: ${{matrix.node-version}}
+      os: ${{matrix.os}}
 
-    steps:
-      - name: Checkout code repo
-        uses: actions/checkout@v4
 
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
 
-      - name: Install dependencies and run tests
-        run: |
-          npm ci
-          npm test
-        env: 
-          CI: true
-      
-      - name: Create artifact log 
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-results-${{ matrix.os }}-${{ matrix.node-version }}
-          path: coverage/
-
+    
   build:
     # This only runs if 'test' passes successfully
     needs: test
