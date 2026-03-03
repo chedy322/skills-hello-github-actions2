@@ -10,7 +10,4 @@ Markdown
 
 | Service | Main Status | Develop Status |
 | :--- | :--- | :--- |
-| **Build & Test** | [![CI](https://github.com/chedy322/skills-hello-github-actions2/actions/workflows
-[![CI Pipeline](https://github.com/chedy322/skills-hello-github-actions2/actions/workflows/welcome.yml/badge.svg?branch=main)](https://github.com/chedy322/skills-hello-github-actions2/actions/workflows/welcome.yml) | [![CI Pipeline](https://github.com/chedy322/skills-hello-github-actions2/actions/workflows/welcome.yml/badge.svg?branch=new-branch)](https://github.com/chedy322/skills-hello-github-actions2/actions/workflows/welcome.yml)
-
-
+| **Build & Test** | [![CI Pipeline](https://github.com/chedy322/skills-hello-github-actions2/actions/workflows/welcome.yml/badge.svg?branch=main)](https://github.com/chedy322/skills-hello-github-actions2/actions/workflows/welcome.yml) | [![CI Pipeline](https://github.com/chedy322/skills-hello-github-actions2/actions/workflows/welcome.yml/badge.svg?branch=new-branch)](https://github.com/chedy322/skills-hello-github-actions2/actions/workflows/welcome.yml) |
