@@ -1,0 +1,34 @@
+name: Ci on docker
+
+on:
+    push:
+        branches: ["new-branch"]
+        paths-ignore: ["*.md"]  
+
+jobs:
+    build-and-push-docker-image:
+        runs-on: ubuntu-latest
+        steps:
+            # checkout the code
+            -   name: Checkout the code repo
+                uses: actions/checkout@v4
+            -   name: build the image
+                run:    docker build -t my-app:${{github.sha}} . 
+            -   name: push the image to registry
+                run: |
+                  echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+                  docker tag my-app:${{ github.sha }} ghcr.io/${{ github.repository }}/my-app:latest
+                  docker push ghcr.io/${{ github.repository }}/my-app:latest
+    deploy-image-to-Render:
+        needs: [build-and-push-docker-image]
+        if: github.ref=='refs/heads/new-branch' && success()
+        runs-on: ubuntu-latest
+        environment: Production
+        steps:
+            -   name: Depoly to Render
+                uses: johnbeynon/render-deploy-action@v0.0.8
+                
+                with:
+                    api-key: ${{ secrets.RENDER_API_KEY }}
+                    service-id: ${{ secrets.RENDER_SERVICE_ID }}
+
