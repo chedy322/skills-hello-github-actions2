@@ -28,5 +28,27 @@ jobs:
                     tags: |
                         ${{ secrets.DOCKER_USERNAME }}/my-app:latest
                         ${{ secrets.DOCKER_USERNAME }}/my-app:${{ github.sha }}
-                  
+    deploy-image-to-Render:
+
+        needs: [build-and-push-docker-image]
+
+        if: github.ref=='refs/heads/new-branch' && success()
+
+        runs-on: ubuntu-latest
+
+        environment: Production
+
+        steps:
+
+            -   name: Depoly to Render
+
+                uses: johnbeynon/render-deploy-action@v0.0.8
+
+                
+
+                with:
+
+                    api-key: ${{ secrets.RENDER_API_KEY }}
+
+                    service-id: ${{ secrets.RENDER_SERVICE_ID }}
     
