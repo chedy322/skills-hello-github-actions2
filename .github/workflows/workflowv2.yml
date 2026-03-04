@@ -32,7 +32,7 @@ jobs:
 
         needs: [build-and-push-docker-image]
 
-        if: github.ref=='refs/heads/new-branch' && success()
+        if: github.ref=='refs/heads/new-branch2' && success()
 
         runs-on: ubuntu-latest
 
