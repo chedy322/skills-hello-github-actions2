@@ -7,7 +7,7 @@ on:
 
 jobs:
     lint:
-        runs-on: ubunto-latest
+        runs-on: ubuntu-latest
         steps:
             # chechkout the code
             -   name: Checkout the code
@@ -18,7 +18,7 @@ jobs:
                     node-version: 20.x
                     cache: npm
             -   name: Install dependecies
-                run: npm install
+                run: npm ci
             -   name: Run lint test
                 run: npm run lint 
 
