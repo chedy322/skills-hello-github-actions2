@@ -4,6 +4,8 @@ on:
     push:
         branches: ["new-branch2"]
         paths-ignore: ["*.md"]  
+        tags:
+            - 'v*'
 
 jobs:
     build-and-push-docker-image:
@@ -19,15 +21,19 @@ jobs:
                     username: ${{ secrets.DOCKER_USERNAME }}
                     password: ${{ secrets.DOCKER_PASSWORD }}
                 
+            -   name: Docker meta tags
+                id: meta
+                uses: docker/metadata-action@v5
+                with:
+                    images: ${{secrets.DOCKER_USERNAME}}/my-app
 
             -   name: Build image and push it to registry
                 uses: docker/build-push-action@v5
                 with:
                     context: .
-                    push: true
-                    tags: |
-                        ${{ secrets.DOCKER_USERNAME }}/my-app:latest
-                        ${{ secrets.DOCKER_USERNAME }}/my-app:${{ github.sha }}
+                    push: ${{github.event_name!='pull_request'}}
+                    tags: ${{steps.meta.outputs.tags}}
+                        
     deploy-image-to-Render:
 
         needs: [build-and-push-docker-image]
